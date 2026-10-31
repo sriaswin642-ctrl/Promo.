@@ -67,6 +67,33 @@ nav a[aria-current="page"]{background:var(--ink);color:var(--bg)}
 .price{font-size:44px;font-weight:800;letter-spacing:-.03em}
 .biz a{color:var(--ink);font-weight:600}
 footer{max-width:1100px;margin:0 auto;padding:10px 20px 30px;color:var(--mute);font-size:14px}
+/* ===== THEMES: add a new block like these to make your own colour theme ===== */
+:root[data-theme="gold"]{--bg:#fff1e0;--card:#fffaf3;--ink:#3a1c08;--mute:#7a5a40;--line:#efd2ae;--acc:#f28c0f;--accink:#2b1608;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:none}
+:root[data-theme="ocean"]{--bg:#e8f3ff;--card:#f7fbff;--ink:#0b2a4a;--mute:#476786;--line:#bcd7f2;--acc:#1e88e5;--accink:#021526;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:hue-rotate(180deg)}
+:root[data-theme="forest"]{--bg:#e9f6ec;--card:#f6fcf7;--ink:#10331c;--mute:#46664f;--line:#bfdcc6;--acc:#43a047;--accink:#06210f;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:hue-rotate(95deg)}
+:root[data-theme="rose"]{--bg:#ffedf3;--card:#fff8fa;--ink:#4a1228;--mute:#8a5068;--line:#f5c6d6;--acc:#e91e63;--accink:#1f0410;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:hue-rotate(310deg)}
+:root[data-theme="night"]{--bg:#0f0f14;--card:#1a1a22;--ink:#f3f3f7;--mute:#a9a9bd;--line:#33334a;--acc:#ffb020;--accink:#1a1000;--good:#6ee7a8;--goodbg:#0f3a28;--wmf:none}
+/* ===== NEW DESIGN ===== */
+body{background:radial-gradient(900px 420px at 90% -5%,color-mix(in srgb,var(--acc) 28%,transparent),transparent),radial-gradient(700px 400px at -10% 30%,color-mix(in srgb,var(--acc) 14%,transparent),transparent),var(--bg);background-attachment:fixed}
+.mark{height:48px;filter:var(--wmf,none)}
+.logo{font-size:30px}
+.hero h1{background:linear-gradient(90deg,var(--ink),color-mix(in srgb,var(--acc) 75%,var(--ink)));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{border:0;border-radius:22px;box-shadow:0 14px 34px -16px color-mix(in srgb,var(--ink) 45%,transparent);transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+.poster{aspect-ratio:3/4}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.6))}
+.poster b,.poster>span:not(.tag):not(.em){position:relative;z-index:1}
+.poster .tag,.poster .em,.play{z-index:1}
+.poster b{font-size:32px}
+button,.btn{box-shadow:0 6px 16px -8px color-mix(in srgb,var(--acc) 80%,#000)}
+.chip{box-shadow:none}
+.dots{display:flex;gap:8px;margin-left:auto}
+.dot{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1.5px var(--line)}
+.dot[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+/* ===== LOGO WATERMARK: opacity = how faint, background-size = how big ===== */
+#wm{position:fixed;inset:0;z-index:0;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:min(86vw,620px);opacity:.09;filter:var(--wmf,none)}
+body>header,body>section,body>main,body>footer,body>.bar{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -182,6 +209,20 @@ function route(){
 }
 window.addEventListener("hashchange",route);
 document.getElementById("q").addEventListener("input",function(){shown=12;render()});
+(function(){
+var T=[["gold","#f28c0f","Gold"],["ocean","#1e88e5","Ocean"],["forest","#43a047","Forest"],["rose","#e91e63","Rose"],["night","#1a1a22","Night"]];
+var root=document.documentElement,hd=document.querySelector("header"),box=document.createElement("div");
+box.className="dots";box.setAttribute("role","group");box.setAttribute("aria-label","Colour theme");
+T.forEach(function(t){var b=document.createElement("button");b.className="dot";b.dataset.t=t[0];b.style.background=t[1];b.setAttribute("aria-label",t[2]+" theme");b.setAttribute("aria-pressed","false");box.appendChild(b)});
+hd.insertBefore(box,document.getElementById("open"));
+var wm=document.createElement("div");wm.id="wm";wm.setAttribute("aria-hidden","true");
+var mk=document.querySelector(".mark");if(mk)wm.style.backgroundImage='url("'+mk.src+'")';
+document.body.insertBefore(wm,document.body.firstChild);
+function set(t){if(t)root.setAttribute("data-theme",t);else root.removeAttribute("data-theme");Array.prototype.forEach.call(box.children,function(b){b.setAttribute("aria-pressed",String(b.dataset.t===t))})}
+var s="";try{s=localStorage.getItem("promo-theme")||""}catch(e){}
+set(s);
+box.addEventListener("click",function(e){var t=e.target.dataset&&e.target.dataset.t;if(!t)return;set(t);try{localStorage.setItem("promo-theme",t)}catch(x){}});
+})();
 chipBar();route();
 </script>
 </body>

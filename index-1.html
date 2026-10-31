@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Promo: watch poster and video ads from local businesses and compare prices before you buy.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%A6%81%3C/text%3E%3C/svg%3E">
+<title>Promo – ads, videos and best prices</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap">
+<style>
+:root{--bg:#fff1e0;--card:#fffaf3;--ink:#3a1c08;--mute:#7a5a40;--line:#efd2ae;--acc:#f28c0f;--accink:#2b1608;--good:#0a7a4b;--goodbg:#d9f5e6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f1008;--card:#2e1a0d;--ink:#ffeedd;--mute:#d1a77e;--line:#4a2d18;--good:#6ee7a8;--goodbg:#0f3a28}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;max-width:1100px;margin:0 auto}
+.logo{font-weight:800;font-size:28px;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.mark{height:42px;width:auto;display:block}
+button,.btn{font:inherit;font-weight:600;border:0;border-radius:999px;padding:10px 18px;cursor:pointer;background:var(--acc);color:var(--accink);text-decoration:none;display:inline-block;text-align:center}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.hero{max-width:1100px;margin:0 auto;padding:12px 20px 8px}
+.hero h1{font-size:clamp(34px,7vw,64px);line-height:1;letter-spacing:-.04em;margin:0 0 10px;font-weight:800;max-width:14ch}
+.hero p{margin:0;color:var(--mute);max-width:46ch}
+.bar{max-width:1100px;margin:16px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{max-width:1100px;margin:0 auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.poster{aspect-ratio:4/5;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;color:#fff;overflow:hidden}
+.poster .em{position:absolute;top:10px;right:14px;font-size:84px;opacity:.9}
+.poster b{font-size:30px;line-height:1;letter-spacing:-.03em;font-weight:800;max-width:11ch}
+.poster span{font-size:14px;margin-top:8px;opacity:.95}
+.tag{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.55);color:#fff;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px}
+.play{position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-size:24px;padding:0}
+.info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.biz{font-size:14px;color:var(--mute);margin:0}
+.info h3{margin:0;font-size:19px;letter-spacing:-.02em}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:6px 0;border-top:1px solid var(--line)}
+td:last-child{text-align:right;font-weight:600}
+tr.best td:first-child::after{content:" Best price";background:var(--goodbg);color:var(--good);font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;margin-left:6px}
+tr.best td:last-child{color:var(--good)}
+.info .btn{margin-top:auto}
+dialog{border:0;border-radius:16px;padding:22px;background:var(--card);color:var(--ink);width:min(440px,92vw);max-height:90vh}
+dialog::backdrop{background:rgba(10,5,40,.6)}
+label{display:block;font-size:14px;font-weight:600;margin:12px 0 4px}
+input,select{font:inherit;width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.row{display:grid;grid-template-columns:1.4fr 1fr;gap:8px;margin-bottom:8px}
+.acts{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
+.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:40px 0}
+.qr{display:block;width:220px;max-width:100%;margin:12px auto;border-radius:12px;background:#fff;padding:8px}
+.pay{text-align:center}
+.pay p{margin:4px 0}
+[hidden]{display:none!important}
+header{flex-wrap:wrap}
+header nav{order:3;flex-basis:100%;display:flex;gap:6px;overflow-x:auto}
+nav a{color:var(--ink);text-decoration:none;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap}
+nav a[aria-current="page"]{background:var(--ink);color:var(--bg)}
+#q{border-radius:999px;padding:12px 18px;background:var(--card)}
+.wrap{max-width:1100px;margin:0 auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.wrap h2{margin:0 0 8px;letter-spacing:-.02em}
+.wrap .card{padding:20px}
+.wrap ol{margin:0;padding-left:20px;color:var(--mute)}
+.wrap li{margin-bottom:6px}
+.price{font-size:44px;font-weight:800;letter-spacing:-.03em}
+.biz a{color:var(--ink);font-weight:600}
+footer{max-width:1100px;margin:0 auto;padding:10px 20px 30px;color:var(--mute);font-size:14px}
+/* ===== THEMES: add a new block like these to make your own colour theme ===== */
+:root[data-theme="gold"]{--bg:#fff1e0;--card:#fffaf3;--ink:#3a1c08;--mute:#7a5a40;--line:#efd2ae;--acc:#f28c0f;--accink:#2b1608;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:none}
+:root[data-theme="ocean"]{--bg:#e8f3ff;--card:#f7fbff;--ink:#0b2a4a;--mute:#476786;--line:#bcd7f2;--acc:#1e88e5;--accink:#021526;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:hue-rotate(180deg)}
+:root[data-theme="forest"]{--bg:#e9f6ec;--card:#f6fcf7;--ink:#10331c;--mute:#46664f;--line:#bfdcc6;--acc:#43a047;--accink:#06210f;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:hue-rotate(95deg)}
+:root[data-theme="rose"]{--bg:#ffedf3;--card:#fff8fa;--ink:#4a1228;--mute:#8a5068;--line:#f5c6d6;--acc:#e91e63;--accink:#1f0410;--good:#0a7a4b;--goodbg:#d9f5e6;--wmf:hue-rotate(310deg)}
+:root[data-theme="night"]{--bg:#0f0f14;--card:#1a1a22;--ink:#f3f3f7;--mute:#a9a9bd;--line:#33334a;--acc:#ffb020;--accink:#1a1000;--good:#6ee7a8;--goodbg:#0f3a28;--wmf:none}
+/* ===== NEW DESIGN ===== */
+body{background:radial-gradient(900px 420px at 90% -5%,color-mix(in srgb,var(--acc) 28%,transparent),transparent),radial-gradient(700px 400px at -10% 30%,color-mix(in srgb,var(--acc) 14%,transparent),transparent),var(--bg);background-attachment:fixed}
+.mark{height:48px;filter:var(--wmf,none)}
+.logo{font-size:30px}
+.hero h1{background:linear-gradient(90deg,var(--ink),color-mix(in srgb,var(--acc) 75%,var(--ink)));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{border:0;border-radius:22px;box-shadow:0 14px 34px -16px color-mix(in srgb,var(--ink) 45%,transparent);transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+.poster{aspect-ratio:3/4}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.6))}
+.poster b,.poster>span:not(.tag):not(.em){position:relative;z-index:1}
+.poster .tag,.poster .em,.play{z-index:1}
+.poster b{font-size:32px}
+button,.btn{box-shadow:0 6px 16px -8px color-mix(in srgb,var(--acc) 80%,#000)}
+.chip{box-shadow:none}
+.dots{display:flex;gap:8px;margin-left:auto}
+.dot{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1.5px var(--line)}
+.dot[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+/* ===== LOGO WATERMARK: opacity = how faint, background-size = how big ===== */
+#wm{position:fixed;inset:0;z-index:0;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:min(86vw,620px);opacity:.09;filter:var(--wmf,none)}
+body>header,body>section,body>main,body>footer,body>.bar{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><img class="mark" alt="" src="data:image/png;base64,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">Promo</div>
+  <button id="open">Post your ad · ₹99</button>
+  <nav aria-label="Pages"><a href="#home">Home</a><a href="#videos">Videos</a><a href="#how">How it works</a></nav>
+</header>
+<section class="hero" id="hero">
+  <h1 id="h1">Watch the ad. Pick the best price.</h1>
+  <p id="hp">Local businesses post their posters and videos with prices side by side. Tap an offer to go straight to the seller.</p>
+</section>
+<div class="bar" id="sbar"><input id="q" type="search" placeholder="Search ads, shops or products" aria-label="Search ads"></div>
+<div class="bar" id="chips" role="group" aria-label="Filter by category"></div>
+<main id="feed" aria-live="polite"></main>
+<section class="wrap" id="howpage" hidden>
+<div class="card"><h2>For shoppers</h2><ol><li>Browse poster and video ads on Home and Videos.</li><li>Use the search bar to find a shop or product.</li><li>Compare the prices listed for each ad. The cheapest is marked.</li><li>Tap the offer button to go straight to the seller.</li></ol></div>
+<div class="card"><h2>For business owners</h2><ol><li>Tap Post your ad and pay by scanning the UPI QR.</li><li>Enter the UPI reference number from your receipt.</li><li>Add your headline, format, two or three seller prices, and your link.</li><li>Publish. Your ad appears at the top of Home.</li></ol></div>
+<div class="card"><h2>Cost</h2><div class="price">₹99</div><p style="color:var(--mute);margin:6px 0 0">One payment for each ad you post. Shoppers use Promo free.</p></div>
+</section>
+<footer>Ads on this demo page are samples. Posting an ad costs ₹99, paid by UPI. Ads you post stay on your screen until you refresh.</footer>
+
+<dialog id="dlg">
+  <div id="payStep" class="pay">
+<h2 style="margin:0 0 4px;letter-spacing:-.02em">Pay ₹99 to post your ad</h2>
+<p>Scan with any UPI app, then enter the 12-digit UPI reference number from your receipt.</p>
+<div id="qrbox" class="qr"></div>
+<p><b>UPI ID:</b> sriaswin642@okaxis</p>
+<a class="btn" href="upi://pay?pa=sriaswin642@okaxis&pn=Sri%20Aswin&am=99&cu=INR">Pay in UPI app</a>
+<label for="txn" style="text-align:left">UPI reference number</label><input id="txn" inputmode="numeric" maxlength="12" placeholder="12 digits">
+<p id="perr" style="color:#c0262d;font-size:14px" role="alert"></p>
+<div class="acts"><button class="ghost" id="pcancel">Cancel</button><button id="paid">I have paid</button></div>
+</div>
+<div id="formStep" hidden>
+<h2 style="margin:0 0 4px;letter-spacing:-.02em">Post your ad</h2>
+  <label for="f-biz">Business name</label><input id="f-biz" placeholder="Sri Textiles">
+  <label for="f-title">Offer headline</label><input id="f-title" placeholder="Festival saree sale">
+  <label for="f-cat">Category</label>
+  <select id="f-cat"><option>Fashion</option><option>Food</option><option>Electronics</option><option>Home</option><option>Services</option></select>
+  <label for="f-type">Format</label>
+  <select id="f-type"><option value="poster">Poster</option><option value="video">Video</option></select>
+  <label>Prices (add up to 3 sellers)</label>
+  <div class="row"><input id="s1" placeholder="Seller" aria-label="Seller 1"><input id="p1" type="number" min="0" placeholder="Price ₹" aria-label="Price 1"></div>
+  <div class="row"><input id="s2" placeholder="Seller" aria-label="Seller 2"><input id="p2" type="number" min="0" placeholder="Price ₹" aria-label="Price 2"></div>
+  <div class="row"><input id="s3" placeholder="Seller" aria-label="Seller 3"><input id="p3" type="number" min="0" placeholder="Price ₹" aria-label="Price 3"></div>
+  <label for="f-link">Link for buyers (page or video)</label><input id="f-link" type="url" placeholder="https://">
+  <label for="f-phone">Company contact number</label><input id="f-phone" type="tel" placeholder="+91 98765 43210">
+  <label for="f-email">Company email</label><input id="f-email" type="email" placeholder="hello@yourshop.com">
+  <p id="err" style="color:#c0262d;margin:10px 0 0;font-size:14px" role="alert"></p>
+  <div class="acts"><button class="ghost" id="cancel">Cancel</button><button id="pub">Publish ad</button></div>
+</div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+var ads=[
+ {biz:"Kavi Silks",title:"Festival silk sarees",cat:"Fashion",type:"poster",em:"🥻",bg:"linear-gradient(160deg,#c2185b,#6a1b9a)",link:"https://example.com",prices:[["Kavi Silks",2499],["Mall Store",2899],["Online Mart",2750]]},
+ {biz:"Annam Kitchen",title:"Family meal combo",cat:"Food",type:"video",em:"🍛",bg:"linear-gradient(160deg,#e65100,#bf360c)",link:"https://example.com",prices:[["Annam Kitchen",449],["Food App A",519],["Food App B",499]]},
+ {biz:"VoltPoint",title:"Wireless earbuds",cat:"Electronics",type:"poster",em:"🎧",bg:"linear-gradient(160deg,#0d47a1,#00838f)",link:"https://example.com",prices:[["VoltPoint",1299],["Big Retail",1599],["E-shop",1449]]},
+ {biz:"Homely Decor",title:"Cotton bedsheet set",cat:"Home",type:"video",em:"🛏️",bg:"linear-gradient(160deg,#2e7d32,#00695c)",link:"https://example.com",prices:[["Homely Decor",899],["Store X",1099],["Market Y",999]]},
+ {biz:"QuickFix Care",title:"AC service at home",cat:"Services",type:"poster",em:"🛠️",bg:"linear-gradient(160deg,#37474f,#1565c0)",link:"https://example.com",prices:[["QuickFix Care",599],["Service Hub",749],["FixIt Now",699]]},
+ {biz:"Sweet Bite",title:"Diwali sweets box",cat:"Food",type:"poster",em:"🍬",bg:"linear-gradient(160deg,#f9a825,#ef6c00)",link:"https://example.com",prices:[["Sweet Bite",650],["Sweet Shop B",720],["Online Sweets",690]]}
+];
+var shown=12,cat="All",feed=document.getElementById("feed"),chips=document.getElementById("chips");
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function contact(a){if(!a.phone&&!a.email)return"";return '<p class="biz" style="display:flex;gap:14px;flex-wrap:wrap">'+(a.phone?'<a href="tel:'+esc(a.phone.replace(/[^\d+]/g,""))+'">Call '+esc(a.phone)+'</a>':'')+(a.email?'<a href="mailto:'+esc(a.email)+'">'+esc(a.email)+'</a>':'')+'</p>'}
+function chipBar(){
+  var cs=["All"];ads.forEach(function(a){if(cs.indexOf(a.cat)<0)cs.push(a.cat)});
+  chips.innerHTML=cs.map(function(c){return '<button class="chip" aria-pressed="'+(c===cat)+'" data-c="'+esc(c)+'">'+esc(c)+'</button>'}).join("");
+}
+function render(){
+  var qv=(document.getElementById("q").value||"").toLowerCase().trim();
+  var list=ads.filter(function(a){if(page==="videos"&&a.type!=="video")return false;if(cat!=="All"&&a.cat!==cat)return false;if(!qv)return true;var t=(a.title+" "+a.biz+" "+a.cat+" "+a.prices.map(function(p){return p[0]}).join(" ")).toLowerCase();return t.indexOf(qv)>-1});
+  if(!list.length){feed.innerHTML='<p class="empty">'+(qv?'No ads match your search. Try another word.':'No ads here yet. Post the first one.')+'</p>';return}
+  var total=list.length;list=list.slice(0,shown);feed.innerHTML=list.map(function(a){
+    var min=Math.min.apply(null,a.prices.map(function(p){return p[1]}));
+    var rows=a.prices.map(function(p){return '<tr'+(p[1]===min?' class="best"':'')+'><td>'+esc(p[0])+'</td><td>₹'+p[1].toLocaleString("en-IN")+'</td></tr>'}).join("");
+    return '<article class="card"><div class="poster" style="background:'+a.bg+'"><span class="tag">'+(a.type==="video"?"Video ad":"Poster")+'</span><span class="em" aria-hidden="true">'+a.em+'</span>'+(a.type==="video"?'<a class="play" href="'+esc(a.link)+'" target="_blank" rel="noopener" aria-label="Watch video: '+esc(a.title)+'">▶</a>':'')+'<b>'+esc(a.title)+'</b><span>'+esc(a.biz)+'</span></div><div class="info"><p class="biz">'+esc(a.cat)+' · '+esc(a.biz)+'</p><table>'+rows+'</table><a class="btn" href="'+esc(a.link)+'" target="_blank" rel="noopener">'+(a.type==="video"?"Watch and buy":"Visit offer")+'</a>'+contact(a)+'</div></article>';
+  }).join("")+(total>shown?'<button class="chip" id="more" style="grid-column:1/-1;justify-self:center">Show more ads ('+(total-shown)+' left)</button>':"");
+}
+feed.addEventListener("click",function(e){if(e.target.id==="more"){shown+=12;render()}});
+chips.addEventListener("click",function(e){var c=e.target.getAttribute("data-c");if(c){cat=c;shown=12;chipBar();render()}});
+var dlg=document.getElementById("dlg"),err=document.getElementById("err");
+var payStep=document.getElementById("payStep"),formStep=document.getElementById("formStep"),perr=document.getElementById("perr"),paid="";
+document.getElementById("open").onclick=function(){err.textContent="";perr.textContent="";paid="";document.getElementById("txn").value="";formStep.hidden=true;payStep.hidden=false;dlg.showModal()};
+document.getElementById("pcancel").onclick=function(){dlg.close()};
+document.getElementById("paid").onclick=function(){var t=document.getElementById("txn").value.replace(/\s/g,"");if(!/^\d{12}$/.test(t)){perr.textContent="Enter the 12-digit UPI reference number from your payment receipt.";return}paid=t;payStep.hidden=true;formStep.hidden=false};
+document.getElementById("cancel").onclick=function(){dlg.close()};
+var grads=["linear-gradient(160deg,#ad1457,#4527a0)","linear-gradient(160deg,#00695c,#1565c0)","linear-gradient(160deg,#ef6c00,#c62828)","linear-gradient(160deg,#283593,#00838f)"];
+var ems={Fashion:"👗",Food:"🍽️",Electronics:"📱",Home:"🏠",Services:"🔧"};
+document.getElementById("pub").onclick=function(){if(!paid){return}
+  var v=function(id){return document.getElementById(id).value.trim()};
+  var prices=[];
+  [1,2,3].forEach(function(i){var s=v("s"+i),p=parseFloat(v("p"+i));if(s&&p>=0&&!isNaN(p))prices.push([s,p])});
+  var link=v("f-link");
+  if(!v("f-biz")||!v("f-title")){err.textContent="Add your business name and an offer headline.";return}
+  if(prices.length<2){err.textContent="Add at least two sellers with prices so people can compare.";return}
+  if(!/^https?:\/\//i.test(link)){err.textContent="Enter a link that starts with http:// or https://";return}
+  if(!/^\+?[\d\s-]{10,15}$/.test(v("f-phone"))){err.textContent="Enter a valid company contact number.";return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("f-email"))){err.textContent="Enter a valid company email.";return}
+  if(ads.length>=1000){err.textContent="Promo is full at 1,000 ads.";return}
+  var c=v("f-cat");
+  ads.unshift({phone:v("f-phone"),email:v("f-email"),biz:v("f-biz"),title:v("f-title"),cat:c,type:v("f-type"),em:ems[c]||"⭐",bg:grads[ads.length%grads.length],link:link,prices:prices});
+  paid="";cat="All";chipBar();render();dlg.close();window.scrollTo(0,0);
+};
+var h1=document.getElementById("h1"),hp=document.getElementById("hp"),hero=document.getElementById("hero"),sbar=document.getElementById("sbar"),howp=document.getElementById("howpage"),page="home";
+function route(){
+  var h=location.hash.replace("#","");page=(h==="videos"||h==="how")?h:"home";var how=page==="how";
+  hero.hidden=how;sbar.hidden=how;chips.hidden=how;feed.hidden=how;howp.hidden=!how;
+  h1.textContent=page==="videos"?"Video ads":"Watch the ad. Pick the best price.";
+  hp.textContent=page==="videos"?"Watch short video ads from local businesses and compare their prices.":"Local businesses post their posters and videos with prices side by side. Tap an offer to go straight to the seller.";
+  Array.prototype.forEach.call(document.querySelectorAll("nav a"),function(a){if(a.getAttribute("href")==="#"+page)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  shown=12;render();window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+document.getElementById("q").addEventListener("input",function(){shown=12;render()});
+(function(){
+var T=[["gold","#f28c0f","Gold"],["ocean","#1e88e5","Ocean"],["forest","#43a047","Forest"],["rose","#e91e63","Rose"],["night","#1a1a22","Night"]];
+var root=document.documentElement,hd=document.querySelector("header"),box=document.createElement("div");
+box.className="dots";box.setAttribute("role","group");box.setAttribute("aria-label","Colour theme");
+T.forEach(function(t){var b=document.createElement("button");b.className="dot";b.dataset.t=t[0];b.style.background=t[1];b.setAttribute("aria-label",t[2]+" theme");b.setAttribute("aria-pressed","false");box.appendChild(b)});
+hd.insertBefore(box,document.getElementById("open"));
+var wm=document.createElement("div");wm.id="wm";wm.setAttribute("aria-hidden","true");
+var mk=document.querySelector(".mark");if(mk)wm.style.backgroundImage='url("'+mk.src+'")';
+document.body.insertBefore(wm,document.body.firstChild);
+function set(t){if(t)root.setAttribute("data-theme",t);else root.removeAttribute("data-theme");Array.prototype.forEach.call(box.children,function(b){b.setAttribute("aria-pressed",String(b.dataset.t===t))})}
+var s="";try{s=localStorage.getItem("promo-theme")||""}catch(e){}
+set(s);
+box.addEventListener("click",function(e){var t=e.target.dataset&&e.target.dataset.t;if(!t)return;set(t);try{localStorage.setItem("promo-theme",t)}catch(x){}});
+})();
+try{new QRCode(document.getElementById("qrbox"),{text:"upi://pay?pa=sriaswin642@okaxis&pn=Sri%20Aswin&am=99&cu=INR",width:204,height:204,correctLevel:QRCode.CorrectLevel.M})}catch(e){document.getElementById("qrbox").textContent="Use the Pay in UPI app button or the UPI ID below."}
+chipBar();route();
+</script>
+</body>
+</html>

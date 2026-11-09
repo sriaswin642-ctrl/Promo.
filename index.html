@@ -54,8 +54,8 @@
 <section class="wrap" id="insights" hidden>
   <div class="card pad" style="grid-column:1/-1">
     <h2>Business insights</h2>
-    <p class="note">Owner-only. Enter the admin key you set in Vercel.</p>
-    <div class="row"><input id="akey" type="password" placeholder="Admin key" aria-label="Admin key"><button id="aload">Load</button></div>
+    <p class="note">A quick look at the ads currently on Promo: categories, price gaps and where to grow.</p>
+    <div class="acts left"><button id="aload">Refresh</button></div>
     <p class="note" id="ains"></p>
   </div>
   <div id="idash" style="grid-column:1/-1;display:grid;gap:18px"></div>
@@ -63,14 +63,14 @@
 
 <section class="wrap" id="howpage" hidden>
   <div class="card pad"><h2>For shoppers</h2><ol><li>Browse poster and video ads on Home and Videos.</li><li>Search by typing, or tap the microphone and speak.</li><li>Compare the prices. The cheapest is marked.</li><li>Tap the offer button to go straight to the seller.</li></ol></div>
-  <div class="card pad"><h2>For business owners</h2><ol><li>Tap Post your ad and fill in your details.</li><li>Make a poster with the AI studio, or let Promo make one.</li><li>Pay securely online (UPI, cards and netbanking).</li><li>Your ad goes live as soon as the payment is confirmed.</li></ol></div>
+  <div class="card pad"><h2>For business owners</h2><ol><li>Tap Post your ad and fill in your details.</li><li>Make a poster in the Poster studio, or let Promo make one.</li><li>Pay securely on Razorpay (UPI, cards and netbanking).</li><li>Send your ad details. It goes live once your payment is confirmed.</li></ol></div>
   <div class="card pad"><h2>Cost</h2><div class="price" id="priceBig">₹99</div><p class="note">One payment for each ad. Shoppers use Promo free.</p></div>
 </section>
 
 <dialog id="dlg">
   <h2 style="margin:0 0 4px">Post your ad</h2>
   <div id="dPrev" class="prevbox small"></div>
-  <div class="acts left"><button class="ghost" id="d-ai">✨ AI poster</button><button class="ghost" id="d-shuf">🎲 Colours</button></div>
+  <div class="acts left"><button class="ghost" id="d-ai">🎨 New poster</button><button class="ghost" id="d-shuf">🎲 Colours</button></div>
   <label for="f-biz">Business name</label><input id="f-biz" placeholder="Sri Textiles">
   <label for="f-title">Offer headline</label><input id="f-title" placeholder="Festival saree sale">
   <label for="f-cat">Category</label><select id="f-cat"></select>
@@ -85,7 +85,8 @@
   <label for="f-phone">Company contact number</label><input id="f-phone" type="tel" placeholder="+91 98765 43210">
   <label for="f-email">Company email</label><input id="f-email" type="email" placeholder="hello@yourshop.com">
   <p id="err" class="err" role="alert"></p>
-  <div class="acts"><button class="ghost" id="cancel">Cancel</button><button id="pay">Pay and publish</button></div>
+  <p class="note">Step 1: pay on the secure Razorpay page. Step 2: send your ad details. Your ad goes live after your payment is confirmed.</p>
+  <div class="acts"><button class="ghost" id="cancel">Cancel</button><button id="pay">1. Pay</button><button id="send">2. Send my ad</button></div>
 </dialog>
 
 <footer>Sample ads are marked and disappear once real ads are posted.</footer>

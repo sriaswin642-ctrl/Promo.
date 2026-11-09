@@ -1,30 +1,29 @@
-# Promo (version 2)
+# Promo - direct upload version (no server needed)
 
-Poster and video ads with price comparison, secure online payment, voice assistant,
-AI poster studio, hourly auto colours and an owner-only insights page.
+Files: index.html, styles.css, app.js, ads.json, logo.png
+Payments use your Razorpay link: https://razorpay.me/@sriaswinr
 
-## What is in this folder
-- `public/`  the website (index.html, styles.css, app.js, logo.png)
-- `api/`     the server functions (payment, database, tracking, AI, stats)
-- `lib/`     shared server code
-- `vercel.json`, `package.json`, `.env.example`
+## Put it online (no GitHub needed)
+1. Go to app.netlify.com/drop on a computer.
+2. Drag this whole folder onto the page. Your site is live in seconds.
+   (GitHub + Vercel also works: upload all 5 files to your repository.)
 
-## Set up (about 20 minutes)
-1. Upload ALL files and folders to your GitHub repository (replace the old files). Keep the folder names exactly: `api`, `lib`, `public`.
-2. In Vercel, open the project > Settings > Build and Deployment: Framework Preset = Other, leave Build and Install commands empty.
-3. Database: Vercel project > Storage > Marketplace > "Upstash for Redis" > create a free database and connect it to the project. This adds the database variables automatically.
-4. Payments: create a Razorpay account (razorpay.com). In Test Mode, copy the Key ID and Key Secret.
-5. Vercel > Settings > Environment Variables. Add: RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, PRICE_INR (99), ADMIN_KEY (your own long password), and optionally ANTHROPIC_API_KEY (for AI posters and AI insights).
-6. Redeploy: Deployments > the latest > Redeploy.
-7. Test with Razorpay TEST mode: post an ad and pay with the test UPI ID `success@razorpay` (see Razorpay's test-mode docs). The ad should appear on Home.
-8. When everything works, finish Razorpay's KYC, switch to Live keys, and replace the two key variables in Vercel.
+## Before you share it: edit 4 lines at the top of app.js
+- PAY_URL  your Razorpay link (already set)
+- PRICE    99
+- OWNER_WHATSAPP  your number with country code, digits only, e.g. 919876543210
+- OWNER_EMAIL     e.g. hello@yourdomain.com
+Fill in at least one of the last two. Businesses use it to send you their ad after paying.
 
-## Optional: webhook (publishes the ad even if the buyer closes the page after paying)
-Razorpay Dashboard > Webhooks > add `https://YOUR-SITE/api/webhook`, event `payment.captured`, and a secret.
-Put the same secret in Vercel as RAZORPAY_WEBHOOK_SECRET. If the webhook shows "Bad signature" in Razorpay's logs, remove it. The site still works without it.
+## How an ad goes live
+1. A business taps Post your ad, fills the form, taps "1. Pay" (opens your Razorpay page), then "2. Send my ad".
+2. You receive a WhatsApp message or email with the ad details.
+3. Check the payment in the Razorpay app or dashboard (right amount, right payer).
+4. Open ads.json, paste the ad details inside the [ ] brackets (put a comma between ads), and upload ads.json again.
+   Example of one ad in ads.json:
+[{"id":"a1b2c3d4","ts":1,"biz":"Sri Textiles","title":"Silk sale","cat":"Fashion","type":"poster","link":"https://example.com","phone":"+91 98765 43210","email":"hello@example.com","fx":"shine","prices":[["Sri Textiles",2499],["Mall Store",2899]],"poster":{"c1":"#c2185b","c2":"#6a1b9a","em":"🥻","head":"Silk sale","sub":"Sri Textiles","cta":"Shop now"}}]
 
-## Notes
-- Never put secret keys in GitHub or in the `public` folder.
-- The price is set on the server (PRICE_INR). Visitors cannot change it.
-- The database keeps the newest 1,000 ads.
-- Vercel's free Hobby plan is for non-commercial projects. A site that takes payments needs Vercel Pro, or another host.
+## Limits of this version
+- Payments are NOT checked automatically. You must confirm each one in Razorpay before adding the ad.
+- Views and clicks are not counted, and there is no AI poster. The poster studio uses templates.
+- For automatic payment checking, a shared database, AI posters and click analytics, use the promo-pro version.

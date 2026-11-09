@@ -98,3 +98,11 @@ input,select{font:inherit;width:100%;padding:10px 12px;border-radius:10px;border
 #toast.show{opacity:1;transform:translate(-50%,0)}
 footer{max-width:1100px;margin:0 auto;padding:10px 20px 30px;color:var(--mute);font-size:14px}
 @media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+
+.has-img::after{display:none}
+.has-img>b,.has-img>.sub,.has-img>.cta,.has-img .em{display:none}
+.uprog{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:8px}
+.uprog i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+#vdlg{padding:0;background:#000;width:min(520px,96vw);border-radius:16px;overflow:hidden}
+#vdlg video{width:100%;display:block;max-height:78vh;background:#000}
+#vdlg .acts{margin:0;padding:10px;justify-content:center}

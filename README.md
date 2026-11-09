@@ -1,29 +1,31 @@
-# Promo - direct upload version (no server needed)
+# Promo - free launch version (no payment, with uploads)
 
 Files: index.html, styles.css, app.js, ads.json, logo.png
-Payments use your Razorpay link: https://razorpay.me/@sriaswinr
 
 ## Put it online (no GitHub needed)
-1. Go to app.netlify.com/drop on a computer.
+1. On a computer, go to app.netlify.com/drop.
 2. Drag this whole folder onto the page. Your site is live in seconds.
    (GitHub + Vercel also works: upload all 5 files to your repository.)
 
-## Before you share it: edit 4 lines at the top of app.js
-- PAY_URL  your Razorpay link (already set)
-- PRICE    99
-- OWNER_WHATSAPP  your number with country code, digits only, e.g. 919876543210
-- OWNER_EMAIL     e.g. hello@yourdomain.com
-Fill in at least one of the last two. Businesses use it to send you their ad after paying.
+## Turn on uploads (free Cloudinary account, about 5 minutes)
+1. Create a free account at cloudinary.com. On the dashboard, copy your Cloud name.
+2. Settings > Upload > Upload presets > Add upload preset.
+3. Set Signing mode to Unsigned. Under the preset's options, limit the allowed formats (jpg, png, webp, mp4) and set a folder such as promo.
+4. Save, and copy the preset name.
+5. Open app.js and fill in the top lines:
+   var CLOUD_NAME = 'your-cloud-name';
+   var UPLOAD_PRESET = 'your-preset-name';
+6. Also fill OWNER_WHATSAPP (digits only, with country code, e.g. 919876543210) or OWNER_EMAIL, so businesses can send you their ad.
+7. Upload the folder again.
+Until step 5 is done, the upload button says uploads are not switched on, and businesses can paste an image link instead.
+Note: an unsigned preset can be used by anyone who reads your page code, so keep the format limits on and watch your Cloudinary free quota.
 
 ## How an ad goes live
-1. A business taps Post your ad, fills the form, taps "1. Pay" (opens your Razorpay page), then "2. Send my ad".
-2. You receive a WhatsApp message or email with the ad details.
-3. Check the payment in the Razorpay app or dashboard (right amount, right payer).
-4. Open ads.json, paste the ad details inside the [ ] brackets (put a comma between ads), and upload ads.json again.
-   Example of one ad in ads.json:
-[{"id":"a1b2c3d4","ts":1,"biz":"Sri Textiles","title":"Silk sale","cat":"Fashion","type":"poster","link":"https://example.com","phone":"+91 98765 43210","email":"hello@example.com","fx":"shine","prices":[["Sri Textiles",2499],["Mall Store",2899]],"poster":{"c1":"#c2185b","c2":"#6a1b9a","em":"🥻","head":"Silk sale","sub":"Sri Textiles","cta":"Shop now"}}]
+1. A business taps Post your ad, uploads a poster image or video (or uses the Promo poster), fills the form and taps Submit my ad.
+2. You get a WhatsApp message or email with the ad details.
+3. Check that the ad is genuine, then paste the details inside the [ ] in ads.json (put a comma between ads) and upload ads.json again.
 
 ## Limits of this version
-- Payments are NOT checked automatically. You must confirm each one in Razorpay before adding the ad.
-- Views and clicks are not counted, and there is no AI poster. The poster studio uses templates.
-- For automatic payment checking, a shared database, AI posters and click analytics, use the promo-pro version.
+- Ads appear only after you add them to ads.json (this is also your review step).
+- Views and clicks are not counted, and the poster studio uses templates, not AI.
+- For automatic publishing, a shared database and click counts, use the promo-pro version (its payment can be removed on request).

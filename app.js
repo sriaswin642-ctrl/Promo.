@@ -1,13 +1,13 @@
 (function () {
 'use strict';
 /* ===== EDIT THESE LINES ===== */
-var PAY_URL = 'https://razorpay.me/@sriaswinr';
-var PRICE = 99;
+var CLOUD_NAME = '';     // Cloudinary cloud name (turns on image and video uploads)
+var UPLOAD_PRESET = '';  // Cloudinary UNSIGNED upload preset name
 var OWNER_WHATSAPP = ''; // your number with country code, digits only, e.g. 919876543210
 var OWNER_EMAIL = '';    // e.g. hello@yourdomain.com
 /* ===== END ===== */
 var $ = function (id) { return document.getElementById(id); };
-function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
 function safeUrl(u) { return /^https?:\/\//i.test(u || '') ? u : '#'; }
 function inr(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
 function api(url, body, headers) {
@@ -17,7 +17,7 @@ function api(url, body, headers) {
 }
 function toast(t) { var e = $('toast'); e.textContent = t; e.className = 'show'; clearTimeout(toast.t); toast.t = setTimeout(function () { e.className = ''; }, 3800); }
 
-var CFG = { price: PRICE, payments: false, ai: false }, ads = [], cat = 'All', shown = 12, page = 'home', draftPoster = null;
+var CFG = { price: 0, payments: false, ai: false }, ads = [], cat = 'All', shown = 12, page = 'home', draftPoster = null;
 var CATS = ['Fashion', 'Food', 'Electronics', 'Home', 'Services'];
 var EMO = { Fashion: '👗', Food: '🍽️', Electronics: '📱', Home: '🏠', Services: '🔧' };
 var PAL = [['#c2185b', '#6a1b9a'], ['#e65100', '#bf360c'], ['#0d47a1', '#00838f'], ['#2e7d32', '#00695c'], ['#37474f', '#1565c0'], ['#ef6c00', '#c62828'], ['#6a1b9a', '#283593'], ['#ad1457', '#4527a0']];
@@ -68,11 +68,17 @@ function setTheme(t) { themeMode = t; try { localStorage.setItem('promo-theme', 
 })();
 
 /* ---------- poster rendering ---------- */
+function imgUrl(u) { return /^https:\/\/[^\s'"()<>\\]+$/i.test(u || '') ? u : ''; }
 function posterHTML(a) {
-  var p = a.poster || {};
-  return '<div class="poster fx-' + esc(a.fx || 'none') + '"><div class="pbg" style="background:linear-gradient(160deg,' + esc(p.c1) + ',' + esc(p.c2) + ')"></div>' +
-    '<span class="tag">' + (a.type === 'video' ? 'Video ad' : 'Poster') + (a.sample ? ' · Sample' : '') + '</span><span class="em" aria-hidden="true">' + esc(p.em) + '</span>' +
-    (a.type === 'video' && !a.sample ? '<a class="play" href="' + esc(safeUrl(a.link)) + '" target="_blank" rel="noopener" data-track="' + esc(a.id) + '" aria-label="Watch video: ' + esc(a.title) + '">▶</a>' : '') +
+  var p = a.poster || {}, im = imgUrl(a.img), vid = imgUrl(a.vid);
+  var bg = im ? "#111 url('" + im + "') center/cover no-repeat" : 'linear-gradient(160deg,' + esc(p.c1) + ',' + esc(p.c2) + ')';
+  var play = '';
+  if (a.type === 'video' && !a.sample && !a.preview) {
+    play = vid ? '<button class="play" data-vid="' + esc(vid) + '" aria-label="Play video: ' + esc(a.title) + '">▶</button>' :
+      '<a class="play" href="' + esc(safeUrl(a.link)) + '" target="_blank" rel="noopener" data-track="' + esc(a.id) + '" aria-label="Watch video: ' + esc(a.title) + '">▶</a>';
+  }
+  return '<div class="poster fx-' + esc(a.fx || 'none') + (im ? ' has-img' : '') + '"><div class="pbg" style="background:' + bg + '"></div>' +
+    '<span class="tag">' + (a.type === 'video' ? 'Video ad' : 'Poster') + (a.sample ? ' · Sample' : '') + '</span><span class="em" aria-hidden="true">' + esc(p.em) + '</span>' + play +
     '<b>' + esc(p.head) + '</b><span class="sub">' + esc(p.sub) + '</span><i class="cta">' + esc(p.cta) + '</i></div>';
 }
 function cardHTML(a) {
@@ -114,6 +120,7 @@ function render() {
   }
 }
 $('feed').addEventListener('click', function (e) {
+  var pv = e.target.closest && e.target.closest('[data-vid]'); if (pv) { openVideo(pv.dataset.vid); return; }
   if (e.target.id === 'more') { shown += 12; render(); return; }
   var t = e.target.closest && e.target.closest('[data-track]');
   if (t) api('/api/track', { id: t.dataset.track, t: 'c' }).catch(function () {});
@@ -188,8 +195,8 @@ $('s-use').onclick = function () { if (!draftPoster) { toast('Generate a poster 
 var dlg = $('dlg');
 function curPoster() { return draftPoster || localPoster({ biz: $('f-biz').value.trim(), product: $('f-title').value.trim(), cat: $('f-cat').value, tone: 'Festive' }); }
 var autoPoster = null;
-function updPrev() { var p = draftPoster || autoPoster || (autoPoster = curPoster()); $('dPrev').innerHTML = posterHTML({ poster: p, fx: $('f-fx').value, type: $('f-type').value, id: 'x', title: '' }); }
-function openPost() { $('err').textContent = ''; autoPoster = null; $('pay').textContent = '1. Pay ' + inr(PRICE); paid = false; updPrev(); if (!dlg.open) dlg.showModal(); }
+function updPrev() { var p = draftPoster || autoPoster || (autoPoster = curPoster()); $('dPrev').innerHTML = posterHTML({ poster: p, fx: $('f-fx').value, type: $('f-type').value, id: 'x', title: '', img: upImg || imgUrl($('f-img').value.trim()), preview: true }); }
+function openPost() { $('err').textContent = ''; autoPoster = null; upImg = ''; upVid = ''; $('f-file').value = ''; $('f-img').value = ''; upNote('Optional. Images up to 10 MB, videos up to 50 MB.', 0); updPrev(); if (!dlg.open) dlg.showModal(); }
 $('open').onclick = openPost;
 $('cancel').onclick = function () { dlg.close(); };
 ['f-fx', 'f-type'].forEach(function (id) { $(id).addEventListener('change', updPrev); });
@@ -201,33 +208,56 @@ $('d-ai').onclick = function () {
   $('err').textContent = ''; $('d-ai').disabled = true;
   genPoster(i).then(function (r) { draftPoster = r.p; updPrev(); $('d-ai').disabled = false;  });
 };
-var paid = false;
+var upImg = '', upVid = '';
+function upNote(t, pct) { $('upNote').textContent = t; $('upProg').hidden = !pct; $('upProg').firstChild.style.width = (pct || 0) + '%'; }
 function collect() {
   var v = function (id) { return $(id).value.trim(); }, prices = [];
   [1, 2, 3].forEach(function (n) { var s = v('s' + n), p = parseFloat(v('p' + n)); if (s && !isNaN(p) && p >= 0) prices.push([s, p]); });
   var d = { id: Math.random().toString(16).slice(2, 10), ts: Date.now(), biz: v('f-biz'), title: v('f-title'), cat: v('f-cat'), type: v('f-type'), fx: v('f-fx'), link: v('f-link'), phone: v('f-phone'), email: v('f-email'), prices: prices, poster: draftPoster || autoPoster || curPoster() };
+  var pasted = imgUrl(v('f-img')), im = upImg || pasted;
+  if (im) d.img = im; if (upVid) d.vid = upVid;
   if (!d.biz || !d.title) return 'Add your business name and headline.';
   if (prices.length < 2) return 'Add at least two sellers with prices.';
+  if (v('f-img') && !pasted) return 'The image link must start with https://';
   if (!/^https?:\/\//i.test(d.link)) return 'The link must start with http:// or https://';
   if (!/^\+?[\d\s-]{10,15}$/.test(d.phone)) return 'Enter a valid contact number.';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return 'Enter a valid email.';
   return d;
 }
-$('pay').onclick = function () {
-  window.open(PAY_URL, '_blank', 'noopener'); paid = true; $('err').textContent = '';
-  toast('Pay ' + inr(PRICE) + ' on the Razorpay page, then come back and tap "2. Send my ad".');
-};
 $('send').onclick = function () {
   var d = collect(); if (typeof d === 'string') { $('err').textContent = d; return; }
-  if (!paid) { $('err').textContent = 'Please pay first (step 1), then send your ad.'; return; }
-  var text = 'New Promo ad request (' + inr(PRICE) + ' paid on Razorpay)\nPlease attach your Razorpay payment ID or screenshot.\n\n' + JSON.stringify(d);
+  var text = 'New Promo ad request\n\n' + JSON.stringify(d);
   try { navigator.clipboard.writeText(text); } catch (e) {}
   var url = OWNER_WHATSAPP ? 'https://wa.me/' + OWNER_WHATSAPP.replace(/\D/g, '') + '?text=' + encodeURIComponent(text) :
     OWNER_EMAIL ? 'mailto:' + OWNER_EMAIL + '?subject=' + encodeURIComponent('New Promo ad: ' + d.title) + '&body=' + encodeURIComponent(text) : '';
   if (url) window.open(url, '_blank', 'noopener');
-  toast(url ? 'Send the message, and add your payment ID or screenshot.' : 'Your ad details were copied. Paste them to the Promo owner with your payment ID.');
+  toast(url ? 'Send the message to submit your ad.' : 'Your ad details were copied. Paste them to the Promo owner.');
   dlg.close();
 };
+$('f-file').addEventListener('change', function () {
+  var f = this.files && this.files[0]; if (!f) return;
+  var vid = f.type.indexOf('video/') === 0, img = f.type.indexOf('image/') === 0;
+  if (!vid && !img) { upNote('Please choose an image or a video.', 0); return; }
+  if (f.size > (vid ? 50 : 10) * 1048576) { upNote('That file is too large. Images up to 10 MB, videos up to 50 MB.', 0); return; }
+  if (!CLOUD_NAME || !UPLOAD_PRESET) { upNote('Uploads are not switched on yet. Paste an image link below instead.', 0); return; }
+  var fd = new FormData(); fd.append('file', f); fd.append('upload_preset', UPLOAD_PRESET);
+  var x = new XMLHttpRequest(); x.open('POST', 'https://api.cloudinary.com/v1_1/' + encodeURIComponent(CLOUD_NAME) + '/auto/upload');
+  x.upload.onprogress = function (e) { if (e.lengthComputable) { var pc = Math.round(e.loaded / e.total * 100); upNote('Uploading… ' + pc + '%', Math.max(3, pc)); } };
+  x.onload = function () {
+    var j = {}; try { j = JSON.parse(x.responseText); } catch (e) {}
+    if (x.status >= 200 && x.status < 300 && imgUrl(j.secure_url)) {
+      if (vid) { upVid = j.secure_url; upImg = imgUrl(j.secure_url.replace(/\.[a-z0-9]+$/i, '.jpg')); $('f-type').value = 'video'; }
+      else { upImg = j.secure_url; upVid = ''; }
+      upNote('Uploaded ✓', 0); updPrev();
+    } else upNote((j.error && j.error.message) || 'Upload failed. Please try again.', 0);
+  };
+  x.onerror = function () { upNote('Upload failed. Check your internet and try again.', 0); };
+  x.send(fd);
+});
+$('f-img').addEventListener('change', updPrev);
+function openVideo(u) { $('vplayer').src = u; $('vdlg').showModal(); var pr = $('vplayer').play(); if (pr && pr.catch) pr.catch(function () {}); }
+$('vclose').onclick = function () { $('vdlg').close(); };
+$('vdlg').addEventListener('close', function () { $('vplayer').pause(); $('vplayer').removeAttribute('src'); });
 
 /* ---------- voice assistant ---------- */
 var SR = window.SpeechRecognition || window.webkitSpeechRecognition, rec = null;
@@ -274,8 +304,8 @@ function renderInsights() {
   var mxN = Math.max.apply(null, Object.keys(byCat).map(function (k) { return byCat[k]; }).concat([1]));
   var least = Object.keys(byCat).sort(function (x, y) { return byCat[x] - byCat[y]; })[0], most = Object.keys(byCat).sort(function (x, y) { return byCat[y] - byCat[x]; })[0];
   var tips = ['Most ads are in ' + most + '. Shoppers there have the most choice.', 'Only ' + byCat[least] + ' ad(s) in ' + least + '. Approach businesses in that category first, since they will face less competition.',
-    'On average the cheapest seller is ' + avgGap.toFixed(1) + '% below the highest price. Use that in your outreach: show your best price on Promo.', 'Revenue: count the confirmed payments in your Razorpay dashboard (each ad is ' + inr(PRICE) + ').'];
-  $('idash').innerHTML = '<div class="kpis">' + [['Ads shown', src.length], ['Avg price gap', avgGap.toFixed(1) + '%'], ['Avg cheapest price', inr(src.length ? Math.round(cheap / src.length) : 0)], ['Price per ad', inr(PRICE)]].map(function (k) { return '<div class="card kpi"><b>' + esc(k[1]) + '</b><span>' + k[0] + '</span></div>'; }).join('') + '</div>' +
+    'On average the cheapest seller is ' + avgGap.toFixed(1) + '% below the highest price. Use that in your outreach: show your best price on Promo.', 'Launch tip: invite 10 local shops to post one ad each, then ask them to share the Promo link.'];
+  $('idash').innerHTML = '<div class="kpis">' + [['Ads shown', src.length], ['Avg price gap', avgGap.toFixed(1) + '%'], ['Avg cheapest price', inr(src.length ? Math.round(cheap / src.length) : 0)], ['Posting fee', 'Free']].map(function (k) { return '<div class="card kpi"><b>' + esc(k[1]) + '</b><span>' + k[0] + '</span></div>'; }).join('') + '</div>' +
     '<div class="card pad bars"><h2>Ads by category</h2>' + Object.keys(byCat).map(function (k) { return bar(k, byCat[k], mxN, byCat[k] + ' ads'); }).join('') + '</div>' +
     '<div class="card pad"><h2>Biggest price gaps</h2><table>' + top.map(function (x) { return '<tr><td>' + esc(x.a.title) + ' · ' + esc(x.a.biz) + '</td><td>' + x.g.toFixed(0) + '% (' + inr(x.save) + ')</td></tr>'; }).join('') + '</table></div>' +
     '<div class="card pad"><h2>Where to grow</h2><ol>' + tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol></div>';
@@ -286,7 +316,7 @@ $('aload').onclick = renderInsights;
 /* ---------- boot ---------- */
 function fillCats() { var o = CATS.map(function (c) { return '<option>' + c + '</option>'; }).join(''); $('f-cat').innerHTML = o; $('s-cat').innerHTML = o; }
 function loadAds() {
-  $('priceBig').textContent = inr(PRICE);
+  $('priceBig').textContent = 'Free';
   return fetch('ads.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
     .then(function (list) { ads = (Array.isArray(list) ? list : []).filter(function (x) { return x && x.biz && x.title && Array.isArray(x.prices) && x.prices.length; }).slice(0, 1000); render(); })
     .catch(function () { render(); });
